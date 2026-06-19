@@ -36,7 +36,9 @@ Every model carries tests, so a build fails loudly if the data drifts:
         arguments: { to: ref('dim_customers'), field: customer_id }
 ```
 
-[//]: # (SCREENSHOT: paste a screenshot of a passing `dbt build` run here)
+A full `dbt build` materializes the silver view and the three gold marts, then runs all 24 tests:
+
+<img src="images/dbt_build_pass.png?raw=true"/>
 
 ### 3. Governance with Unity Catalog
 
@@ -46,11 +48,17 @@ The medallion layers are schemas (`bronze` / `silver` / `gold`) inside a single 
 
 The pipeline is defined as a Databricks Asset Bundle (`databricks.yml`) — a job whose first task runs the Auto Loader ingestion and whose second runs `dbt build`, with the dependency enforced. Deploying it is `databricks bundle deploy`, so the orchestration lives in version control instead of being wired up by hand.
 
-[//]: # (SCREENSHOT: paste a screenshot of the Job / Workflows DAG here)
+<img src="images/DAG-Retail_Lakehouse.png?raw=true"/>
+
+A bundle run executes both tasks end to end on serverless compute — ingestion, then the dbt transform and tests:
+
+<img src="images/Success-Retail_Lakehouse.png?raw=true"/>
 
 ### 5. CI/CD
 
 A GitHub Actions workflow runs `dbt parse` on every pull request — fast, and it never touches the warehouse, so it costs no compute — while the full `dbt build` with tests runs on demand. Connection details are GitHub secrets; nothing sensitive is committed.
+
+<img src="images/dbt_workflow_run.png?raw=true"/>
 
 ### 6. Takeaways
 
