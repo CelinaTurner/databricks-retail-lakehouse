@@ -1,0 +1,24 @@
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+dbt/.user.yml
+dbt/profiles.yml          # local copy may contain a resolved token — never commit
+package-lock.yml
+
+# Databricks bundle
+.databricks/
+*.tfstate
+*.tfstate.*
+
+# Secrets / env
+.env
+*.pem
+*.p8
+*.key
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+__pycache__/

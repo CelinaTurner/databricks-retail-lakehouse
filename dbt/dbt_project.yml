@@ -1,0 +1,27 @@
+name: 'retail_lakehouse'
+version: '1.0.0'
+config-version: 2
+
+profile: 'retail_lakehouse'
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Medallion routing:
+#   staging models -> the SILVER schema (cleaned, conformed)
+#   mart models    -> the GOLD schema   (business-ready)
+# The generate_schema_name macro (see macros/) places models in these
+# schemas directly rather than prefixing them with the target schema.
+models:
+  retail_lakehouse:
+    staging:
+      +materialized: view
+      +schema: silver
+    marts:
+      +materialized: table
+      +schema: gold

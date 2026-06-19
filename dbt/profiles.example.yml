@@ -1,0 +1,35 @@
+# Copy this file to ~/.dbt/profiles.yml (or keep it here and run dbt with
+# DBT_PROFILES_DIR pointed at this folder). All sensitive/connection values
+# are read from environment variables, so this file is safe to commit.
+#
+# Set these before running dbt (values come from your SQL warehouse's
+# "Connection details" tab; the token is a personal access token you create):
+#
+#   export DBT_HOST="dbc-xxxxxxxx-xxxx.cloud.databricks.com"   # Server hostname
+#   export DBT_HTTP_PATH="/sql/1.0/warehouses/xxxxxxxxxxxxxxxx" # HTTP path
+#   export DBT_TOKEN="dapi....."                                # PAT — keep secret!
+#
+# NEVER hard-code DBT_TOKEN into this file or commit it anywhere.
+
+retail_lakehouse:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      catalog: retail_portfolio
+      schema: gold            # default schema; staging/marts override per folder
+      host: "{{ env_var('DBT_HOST') }}"
+      http_path: "{{ env_var('DBT_HTTP_PATH') }}"
+      token: "{{ env_var('DBT_TOKEN') }}"
+      threads: 4
+
+    # Used by CI. Identical connection; kept separate so you can point it at a
+    # sandbox catalog later if you want CI isolated from dev.
+    ci:
+      type: databricks
+      catalog: retail_portfolio
+      schema: gold
+      host: "{{ env_var('DBT_HOST') }}"
+      http_path: "{{ env_var('DBT_HTTP_PATH') }}"
+      token: "{{ env_var('DBT_TOKEN') }}"
+      threads: 4

@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg_online_retail
+    description: "Cleaned, conformed invoice-line transactions (Silver)."
+    columns:
+      - name: invoice_no
+        description: "Invoice number (cancellations already removed)."
+        data_tests:
+          - not_null
+      - name: stock_code
+        description: "Product/stock code."
+        data_tests:
+          - not_null
+      - name: quantity
+        description: "Units sold; always positive after cleaning."
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+      - name: unit_price
+        description: "Unit price; always positive after cleaning."
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: false
+      - name: customer_id
+        description: "Customer identifier; never null after cleaning."
+        data_tests:
+          - not_null
+      - name: line_revenue
+        description: "quantity * unit_price."
+        data_tests:
+          - not_null

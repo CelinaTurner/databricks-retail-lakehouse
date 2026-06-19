@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: fct_sales
+    description: "Sales fact at invoice-line grain (Gold)."
+    columns:
+      - name: sales_key
+        description: "Surrogate key for the invoice line."
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "FK to dim_customers."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: line_revenue
+        data_tests:
+          - not_null
+
+  - name: dim_customers
+    description: "Customer dimension with RFM-style measures (Gold)."
+    columns:
+      - name: customer_id
+        description: "Customer identifier; one row per customer."
+        data_tests:
+          - not_null
+          - unique
+      - name: order_count
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+      - name: lifetime_revenue
+        data_tests:
+          - not_null
+
+  - name: revenue_by_country
+    description: "Revenue and activity by country (Gold, BI-ready)."
+    columns:
+      - name: country
+        data_tests:
+          - not_null
+          - unique
+      - name: total_revenue
+        data_tests:
+          - not_null

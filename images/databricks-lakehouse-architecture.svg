@@ -1,0 +1,87 @@
+<svg viewBox="0 0 1080 660" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bgL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="660" rx="14" fill="url(#bgL)"/>
+
+  <text x="40" y="48" fill="#f8fafc" font-size="23" font-weight="700">Retail Lakehouse — Databricks + dbt</text>
+  <text x="40" y="73" fill="#94a3b8" font-size="13.5">UCI Online Retail II · medallion architecture · transformed &amp; tested with dbt · serverless</text>
+
+  <!-- Unity Catalog governance band -->
+  <rect x="230" y="108" width="620" height="38" rx="8" fill="#172554" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="540" y="132" fill="#bfdbfe" font-size="12.5" font-weight="600" text-anchor="middle">Unity Catalog governance · catalog: retail_portfolio · schemas: bronze / silver / gold</text>
+
+  <!-- Source -->
+  <rect x="40" y="250" width="110" height="90" rx="10" fill="#1e293b" stroke="#475569"/>
+  <text x="95" y="288" fill="#e2e8f0" font-size="12" font-weight="600" text-anchor="middle">CSV</text>
+  <text x="95" y="307" fill="#94a3b8" font-size="10.5" text-anchor="middle">Online</text>
+  <text x="95" y="321" fill="#94a3b8" font-size="10.5" text-anchor="middle">Retail II</text>
+
+  <!-- Bronze -->
+  <rect x="195" y="240" width="150" height="110" rx="10" fill="#3f2d1b" stroke="#b45309" stroke-width="2"/>
+  <circle cx="216" cy="265" r="6" fill="#cd7f32"/>
+  <text x="230" y="270" fill="#fcd9a8" font-size="14" font-weight="700">Bronze</text>
+  <text x="212" y="296" fill="#e7c9a3" font-size="10.5">raw, as-landed</text>
+  <text x="212" y="313" fill="#cbb79c" font-size="10.5">Delta table</text>
+  <text x="212" y="333" fill="#9fb3c8" font-size="10" font-style="italic">via Auto Loader</text>
+
+  <!-- Silver -->
+  <rect x="430" y="240" width="150" height="110" rx="10" fill="#2b3340" stroke="#94a3b8" stroke-width="2"/>
+  <circle cx="451" cy="265" r="6" fill="#cbd5e1"/>
+  <text x="465" y="270" fill="#f1f5f9" font-size="14" font-weight="700">Silver</text>
+  <text x="447" y="296" fill="#e2e8f0" font-size="10.5">clean · typed</text>
+  <text x="447" y="313" fill="#cbd5e1" font-size="10.5">deduped · filtered</text>
+  <text x="447" y="333" fill="#9fb3c8" font-size="10" font-style="italic">dbt view + tests</text>
+
+  <!-- Gold -->
+  <rect x="665" y="240" width="150" height="110" rx="10" fill="#3a3115" stroke="#d4af37" stroke-width="2"/>
+  <circle cx="686" cy="265" r="6" fill="#d4af37"/>
+  <text x="700" y="270" fill="#f5e9c0" font-size="14" font-weight="700">Gold</text>
+  <text x="682" y="296" fill="#efe2b8" font-size="10.5">fct_sales · dim_*</text>
+  <text x="682" y="313" fill="#ddcf9e" font-size="10.5">revenue marts</text>
+  <text x="682" y="333" fill="#9fb3c8" font-size="10" font-style="italic">dbt tables + tests</text>
+
+  <!-- Consumption -->
+  <rect x="900" y="250" width="140" height="90" rx="10" fill="#14342b" stroke="#10b981" stroke-width="1.6"/>
+  <text x="970" y="285" fill="#a7f3d0" font-size="12" font-weight="600" text-anchor="middle">SQL dashboard</text>
+  <text x="970" y="305" fill="#6ee7b7" font-size="10.5" text-anchor="middle">+ alert on</text>
+  <text x="970" y="320" fill="#6ee7b7" font-size="10.5" text-anchor="middle">Gold marts</text>
+
+  <!-- flow arrows -->
+  <line x1="152" y1="295" x2="191" y2="295" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="347" y1="295" x2="426" y2="295" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="582" y1="295" x2="661" y2="295" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="817" y1="295" x2="896" y2="295" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- dbt tags on the two transform arrows -->
+  <rect x="372" y="210" width="30" height="18" rx="4" fill="#ff694b"/>
+  <text x="387" y="223" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">dbt</text>
+  <line x1="387" y1="228" x2="387" y2="292" stroke="#ff694b" stroke-width="1" stroke-dasharray="3 2"/>
+  <rect x="607" y="210" width="30" height="18" rx="4" fill="#ff694b"/>
+  <text x="622" y="223" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">dbt</text>
+  <line x1="622" y1="228" x2="622" y2="292" stroke="#ff694b" stroke-width="1" stroke-dasharray="3 2"/>
+
+  <!-- Orchestration band -->
+  <rect x="195" y="400" width="620" height="46" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.6"/>
+  <text x="505" y="420" fill="#c7d2fe" font-size="12.5" font-weight="600" text-anchor="middle">Databricks Job — ingest_bronze → dbt_build</text>
+  <text x="505" y="437" fill="#a5b4fc" font-size="10.5" text-anchor="middle">defined as code in a Databricks Asset Bundle (databricks.yml)</text>
+  <line x1="270" y1="350" x2="270" y2="398" stroke="#818cf8" stroke-width="1" stroke-dasharray="4 3"/>
+  <line x1="505" y1="350" x2="505" y2="398" stroke="#818cf8" stroke-width="1" stroke-dasharray="4 3"/>
+  <line x1="740" y1="350" x2="740" y2="398" stroke="#818cf8" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- CI band -->
+  <rect x="195" y="470" width="620" height="44" rx="8" fill="#1e293b" stroke="#64748b" stroke-width="1.4"/>
+  <text x="505" y="490" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">GitHub Actions CI</text>
+  <text x="505" y="506" fill="#94a3b8" font-size="10.5" text-anchor="middle">dbt parse on every PR (no warehouse) · dbt build + test on demand</text>
+
+  <!-- footer -->
+  <text x="40" y="560" fill="#64748b" font-size="11">Data quality enforced by dbt tests (not_null, unique, relationships, accepted_range) at both Silver and Gold.</text>
+  <text x="40" y="580" fill="#64748b" font-size="11">Governance (top) spans all layers; orchestration and CI (bottom) build and validate the whole pipeline.</text>
+</svg>

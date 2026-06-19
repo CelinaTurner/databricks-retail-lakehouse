@@ -1,0 +1,56 @@
+name: dbt
+
+# Two modes:
+#   * Pull request  -> cheap validation: install deps and `dbt parse` + compile.
+#                      Does not touch the warehouse, so it never burns quota.
+#   * Manual run     -> full `dbt build` (models + tests) against the warehouse.
+#
+# Connection values come from repository secrets (Settings → Secrets and
+# variables → Actions): DBT_HOST, DBT_HTTP_PATH, DBT_TOKEN.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DBT_HOST: ${{ secrets.DBT_HOST }}
+  DBT_HTTP_PATH: ${{ secrets.DBT_HTTP_PATH }}
+  DBT_TOKEN: ${{ secrets.DBT_TOKEN }}
+  DBT_PROFILES_DIR: ${{ github.workspace }}/dbt
+
+jobs:
+  validate:
+    name: parse / compile (no warehouse)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dbt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install dbt-databricks
+      - run: cp profiles.example.yml profiles.yml
+      - run: dbt deps
+      - name: dbt parse
+        run: dbt parse
+
+  build:
+    name: build + test (warehouse)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dbt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install dbt-databricks
+      - run: cp profiles.example.yml profiles.yml
+      - run: dbt deps
+      - name: dbt build
+        run: dbt build

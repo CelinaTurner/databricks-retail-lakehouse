@@ -1,0 +1,78 @@
+# Databricks Asset Bundle — orchestration as code.
+#
+# Defines a job that (1) runs the bronze Auto Loader ingestion notebook, then
+# (2) runs `dbt build` (models + tests) against the SQL warehouse. Deploy with:
+#
+#   databricks bundle validate
+#   databricks bundle deploy -t dev
+#   databricks bundle run retail_medallion -t dev
+#
+# Supply the two variables below at deploy time, e.g.:
+#   databricks bundle deploy -t dev \
+#     --var="workspace_host=https://dbc-xxxx.cloud.databricks.com" \
+#     --var="warehouse_id=xxxxxxxxxxxxxxxx"
+#
+# Note: on Free Edition / serverless, you may need to adjust the dbt task's
+# compute binding in the UI after first deploy. Treat this as the IaC artifact
+# that captures the pipeline definition; the dbt task itself can also be run
+# locally (see README) during development.
+
+bundle:
+  name: retail_lakehouse
+
+# Keep locally-generated dbt artifacts out of the deployed bundle.
+sync:
+  exclude:
+    - "dbt/target/"
+    - "dbt/dbt_packages/"
+    - "dbt/logs/"
+    - "**/__pycache__"
+
+variables:
+
+  warehouse_id:
+    description: "SQL warehouse id (the trailing segment of the HTTP path)"
+
+targets:
+  dev:
+    mode: development
+    default: true
+  
+
+resources:
+  jobs:
+    retail_medallion:
+      name: retail_medallion_pipeline
+      tasks:
+        - task_key: ingest_bronze
+          notebook_task:
+            notebook_path: ./src/01_ingest_bronze.py
+
+        - task_key: dbt_build
+          depends_on:
+            - task_key: ingest_bronze
+          dbt_task:
+            project_directory: ./dbt
+            warehouse_id: ${var.warehouse_id}
+            catalog: retail_portfolio
+            schema: silver
+            commands:
+              - "dbt deps"
+              - "dbt build"
+          environment_key: dbt_env
+
+      # Serverless environment for the dbt task (Free Edition has no classic
+      # job clusters). dbt-databricks is installed here instead of via libraries.
+      environments:
+        - environment_key: dbt_env
+          spec:
+            environment_version: "2"
+            dependencies:
+              - "dbt-databricks>=1.8.0,<2.0.0"
+
+      # Run on a schedule (paused by default so it doesn't burn quota
+      # unattended — unpause in the UI when you want it live).
+      schedule:
+        quartz_cron_expression: "0 0 6 * * ?"
+        timezone_id: America/Chicago
+        pause_status: PAUSED

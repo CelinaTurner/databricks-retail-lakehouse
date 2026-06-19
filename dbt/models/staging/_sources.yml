@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw ingestion layer, loaded by Auto Loader from the landing volume."
+    catalog: retail_portfolio
+    schema: bronze
+    tables:
+      - name: online_retail
+        description: >
+          Raw Online Retail II transactions, as-landed. One row per invoice line.
+          Column names match the UCI 'Online Retail II' dataset (note the space
+          in 'Customer ID' and 'Price' rather than 'UnitPrice').
+        columns:
+          - name: Invoice
+            description: "Invoice number; a leading 'C' marks a cancellation."
+          - name: "Customer ID"
+            description: "Customer identifier; null for guest/anonymous sales."
